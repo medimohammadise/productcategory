@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+
+  postgresqldb:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=school-user
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=schooldb
+      - POSTGRES_INITDB_ARGS="--auth=md5"
+    ports:
+      - "5432:5432"
+
+  localstack:
+    image: localstack/localstack:0.14.2
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,sqs
+      - DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOST_TMP_FOLDER=${TMPDIR}
+    volumes:
+      - "${TMPDIR:-/private}:/private"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - '../.localstack:/docker-entrypoint-initaws.d'
+
+# keycloak:
+#  container_name: cashless-school-keycloak
+#  image: "quay.io/keycloak/keycloak:19.0.1"
+#  environment:
+#    - KEYCLOAK_ADMIN=admin
+#    - KEYCLOAK_ADMIN_PASSWORD=admin
+#    - DEBUG=true
+#    - DEBUG_PORT='*:8787'
+#    - DB_VENDOR=POSTGRES
+#    - DB_IMAGE=postgres:14-alpine
+#    - DB_ADDR=postgres
+#    - DB_PORT=5432
+#    - DB_DATABASE=schooldb
+#    - DB_USER=school-user
+#    - DB_PASSWORD=secret
+#  ports:
+#    - "28080:8080"
+#    - "127.0.0.1:8787:8787" # debug port
+#  depends_on:
+#    - postgresqldb
+#  command:
+#    - start-dev
