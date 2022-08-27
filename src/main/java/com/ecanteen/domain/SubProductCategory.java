@@ -1,16 +1,17 @@
 package com.ecanteen.domain;
 
-import lombok.Getter;
+ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+ import java.util.List;
 
 
 @Entity
 @Getter
 @Setter
-public class SubProductCategory implements Serializable {
+public class SubProductCategory extends Auditable<String> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -20,26 +21,18 @@ public class SubProductCategory implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "Name")
-    private String  Name;
+    @Column(name = "name", unique = true, nullable = false)
+    private String name;
 
+    @Column(name = "productCategoryName", unique = true, nullable = false)
+    private String productCategoryName;
 
-    /**
-     * Many_To_One  relation with productCategory
-     */
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "productCategory_id")
+    @JoinColumn(name = "productCategory_id", referencedColumnName = "id" ,nullable = false, updatable = false)
     private ProductCategory productCategory;
 
-
-
-//    /**
-//     * One_To_Many relation with product
-//     */
-//    @OneToMany(mappedBy = "subProductCategory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    private List<Product> product;
-
-
+    @OneToMany(mappedBy = "subProductCategory")
+    private List<Product> product;
 
     public SubProductCategory id(Long id) {
         this.setId(id);
@@ -52,14 +45,11 @@ public class SubProductCategory implements Serializable {
         return this;
     }
 
+
     public SubProductCategory productCategory(ProductCategory productCategory) {
         this.setProductCategory(productCategory);
         return this;
     }
-//    public SubProductCategory product(Product product) {
-//        this.setProduct(product);
-//        return this;
-//    }
 
     @Override
     public boolean equals(Object o) {

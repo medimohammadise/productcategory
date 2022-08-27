@@ -4,10 +4,16 @@
 
 --changeSet sara:1
 create table ProductAttribute(
-  id int  primary key,
-  name varchar(100),
-  value varchar(100),
-  product_id Int
+  id int NOT NULL  primary key,
+  name varchar(100) NOT NULL,
+  value varchar(100) NOT NULL,
+  product_id Int ,
+   productName  varchar(255),
+   created_by varchar(255),
+  created_date Date,
+  last_modified_by varchar(255),
+  last_modified_date Date
+
 
 
 );

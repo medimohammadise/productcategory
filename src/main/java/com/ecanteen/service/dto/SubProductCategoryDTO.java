@@ -1,24 +1,27 @@
 package com.ecanteen.service.dto;
 
-import com.ecanteen.domain.Product;
 import com.ecanteen.domain.ProductCategory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 @Getter
 @Setter
-public class SubProductCategoryDTO implements Serializable {
-     private Long id;
+public class SubProductCategoryDTO  implements Serializable {
 
-     private String Name;
 
-     private ProductCategory productCategory;
+    private Long id;
 
-     //private List<Product> product;
+    private String Name;
+
+    private String productCategoryName;
+
+    @JsonIgnore
+    private ProductCategory productCategory;
+
 
 
     @Override

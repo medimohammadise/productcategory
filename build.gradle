@@ -86,12 +86,17 @@ dependencies {
 	testImplementation "org.springframework.boot:spring-boot-test"
 	testImplementation group: 'io.quarkus', name: 'quarkus-junit5', version: '2.10.1.Final'
 	testImplementation "com.h2database:h2"
+	implementation group: 'io.swagger', name: 'swagger-core', version: '1.6.1'
+
+
+
+
 	//testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
 //    testImplementation "com.github.dasniko:testcontainers-keycloak:2.2.2"
 //    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 //    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
-//    implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
-//    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+   //implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+  // implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
 
 }
 project.ext.diffChangelogFile = "src/main/resources/db/migration/changelog/" + new Date().format("yyyyMMddHHmmss") + "liquibase-changelog.xml"

@@ -3,6 +3,7 @@ package com.ecanteen.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,7 +11,8 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
-public class ProductAttribute implements Serializable {
+
+public class ProductAttribute extends Auditable<String> implements Serializable {
 
     @Id
     @SequenceGenerator(name = "sequenceGenerator", sequenceName = "productAttribute_seq", allocationSize = 1)
@@ -18,18 +20,14 @@ public class ProductAttribute implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name",unique = true, nullable = false)
     private String name;
 
-    @Column(name = "value")
+    @Column(name = "value" , nullable = false)
     private String value;
 
-
-    /**
-     * Many_to_One  relation with product
-     */
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id" ,nullable = false, updatable = false)
     private Product product;
 
 
@@ -44,10 +42,12 @@ public class ProductAttribute implements Serializable {
         return this;
     }
 
+
     public ProductAttribute value(String value) {
         this.setValue(value);
         return this;
     }
+
 
     public ProductAttribute product(Product product) {
         this.setProduct(product);

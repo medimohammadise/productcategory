@@ -1,8 +1,9 @@
-package com.ecanteen.service.impl;
+package com.ecanteen.service.mapper.impl;
 
+import com.ecanteen.domain.Product;
 import com.ecanteen.domain.ProductAttribute;
 import com.ecanteen.repository.ProductAttributeRepository;
-import com.ecanteen.service.ProductAttributeService;
+import com.ecanteen.repository.ProductRepository;
 import com.ecanteen.service.dto.ProductAttributeDTO;
 import com.ecanteen.service.mapper.ProductAttributeMapper;
 import org.slf4j.Logger;
@@ -18,39 +19,55 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ProductAttributeServiceImpl implements ProductAttributeService {
+public class ProductAttributeServiceImpl {
 
     private final Logger log = LoggerFactory.getLogger(ProductAttributeServiceImpl.class);
 
 
     private final ProductAttributeMapper productAttributeMapper;
     private final ProductAttributeRepository productAttributeRepository;
-
+    private final ProductRepository productRepository;
 
 
     @Autowired
-    public ProductAttributeServiceImpl(ProductAttributeMapper productAttributeMapper, ProductAttributeRepository productAttributeRepository) {
+    public ProductAttributeServiceImpl(ProductAttributeMapper productAttributeMapper, ProductAttributeRepository productAttributeRepository, ProductRepository productRepository) {
         this.productAttributeMapper = productAttributeMapper;
         this.productAttributeRepository = productAttributeRepository;
+        this.productRepository = productRepository;
     }
 
-    @Override
+
     public ProductAttributeDTO save(ProductAttributeDTO productAttributeDTO) {
-        log.debug("Request to save productAttribute : {}", productAttributeMapper);
+        ProductAttribute newProductAttribute = null;
+        log.debug("Request to save ProductAttribute : {}", productAttributeMapper);
         ProductAttribute productAttribute = productAttributeMapper.toEntity(productAttributeDTO);
-        productAttribute = productAttributeRepository.save(productAttribute);
-        return productAttributeMapper.toDto(productAttribute);
+        Optional<Product> product = productRepository.findByName(productAttributeDTO.getProductName());
+        var productEntity = product.get();
+        var productAttributeEntity = productAttributeRepository.findByName(productAttributeDTO.getProductName());
+
+        if (!productAttributeEntity.isPresent()) {
+            productAttribute.setId(productAttribute.getId());
+            productAttribute.setProduct(productEntity);
+            newProductAttribute = productAttributeRepository.save(productAttribute);
+        } else {
+
+            productAttribute.setProduct(productEntity);
+            productAttributeRepository.save(productAttribute);
+
+        }
+
+        return productAttributeMapper.toDto(newProductAttribute);
     }
 
-    @Override
-    public ProductAttributeDTO update(ProductAttributeDTO productAttributeDTO) {
+
+    public Optional<ProductAttributeDTO> update(ProductAttributeDTO productAttributeDTO) {
         log.debug("Request to save productAttribute : {}", productAttributeDTO);
         ProductAttribute productAttribute = productAttributeMapper.toEntity(productAttributeDTO);
         productAttribute = productAttributeRepository.save(productAttribute);
-        return productAttributeMapper.toDto(productAttribute);
+        return Optional.ofNullable(productAttributeMapper.toDto(productAttribute));
     }
 
-    @Override
+
     public Optional<ProductAttributeDTO> partialUpdate(ProductAttributeDTO productAttributeDTO) {
         log.debug("Request to partially update productAttribute : {}", productAttributeDTO);
 
@@ -65,30 +82,31 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
                 .map(productAttributeMapper::toDto);
     }
 
-    @Override
+
     @Transactional(readOnly = true)
     public Page<ProductAttributeDTO> findAll(Pageable pageable) {
         log.debug("Request to get all productAttribute");
         return productAttributeRepository.findAll(pageable).map(productAttributeMapper::toDto);
     }
 
-    @Override
+
     @Transactional(readOnly = true)
     public Optional<ProductAttributeDTO> findOne(Long id) {
         log.debug("Request to get productAttribute : {}", id);
         return productAttributeRepository.findById(id).map(productAttributeMapper::toDto);
     }
 
-    @Override
+
     public void delete(Long id) {
         log.debug("Request to delete productAttribute : {}", id);
         productAttributeRepository.deleteById(id);
     }
 
-    @Override
+
     public void deleteAll() {
         log.debug("Request to delete productCategory");
         productAttributeRepository.deleteAll();
 
     }
+
 }
