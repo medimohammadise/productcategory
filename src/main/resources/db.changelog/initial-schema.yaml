@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: sara
+      changes:
+        - loadData:
+            file: /db/data/ProductCategory.csv
+            tableName: productcategory
+            separator: ;
+  - changeSet:
+      id: 2
+      author: sara
+      changes:
+        - loadData:
+            file: /db/data/SubProductCategory.csv
+            tableName: subproductcategory
+            separator: ;
+            constraints:
+              foreignKeyName: fk_subProductCategory_productCategory
+              references: ProductCategory(id)
+
+  - changeSet:
+      id: 3
+      author: sara
+      changes:
+        - loadData:
+            file: /db/data/Product.csv
+            tableName: product
+            separator: ;
+            constraints:
+              foreignKeyName: fk_product_subProductCategory
+              references: SubProductCategory(id)
+  - changeSet:
+      id: 4
+      author: sara
+      changes:
+        - loadData:
+            file: /db/data/ProductAttribute.csv
+            tableName: productattribute
+            separator: ;
+            constraints:
+              foreignKeyName: fk_productAttribute_product
+              references: Product(id)
+
+
+
+
