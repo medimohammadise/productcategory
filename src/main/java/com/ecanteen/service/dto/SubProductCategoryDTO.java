@@ -19,8 +19,8 @@ public class SubProductCategoryDTO  implements Serializable {
 
     private String productCategoryName;
 
-    @JsonIgnore
-    private ProductCategory productCategory;
+
+    //private ProductCategory productCategory;
 
 
 

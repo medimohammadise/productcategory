@@ -4,7 +4,7 @@
 
 --changeSet sara:1
 create table SubProductCategory(
-  id int NOT NULL  primary key,
+  id int NOT NULL UNIQUE  primary key,
   name varchar(100) UNIQUE NOT NULL,
   productCategory_id Int ,
   productCategoryName  varchar(255),

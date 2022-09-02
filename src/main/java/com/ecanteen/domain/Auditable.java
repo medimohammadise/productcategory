@@ -1,5 +1,6 @@
 package com.ecanteen.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,19 +17,19 @@ import java.util.Date;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class Auditable<U> {
-
+    @JsonIgnore
     @CreatedBy
     @Column(name = "created_by")
     private U createdBy;
-
+    @JsonIgnore
     @CreatedDate
     @Column(name = "created_date")
     private Date createdDate;
-
+    @JsonIgnore
     @LastModifiedBy
     @Column(name = "last_modified_by")
     private U lastModifiedBy;
-
+    @JsonIgnore
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;

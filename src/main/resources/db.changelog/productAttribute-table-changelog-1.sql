@@ -4,7 +4,7 @@
 
 --changeSet sara:1
 create table ProductAttribute(
-  id int NOT NULL  primary key,
+  id int NOT NULL UNIQUE  primary key,
   name varchar(100) NOT NULL,
   value varchar(100) NOT NULL,
   product_id Int ,
