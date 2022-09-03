@@ -1,0 +1,32 @@
+ 
+name: CI merge-branches
+
+ 
+on:
+   push:
+    branches:
+    - product-category
+   pull_request:
+    branches:
+    - product-category
+ 
+   workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'manually run workflow tags' 
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@product-category
+ 
+
+      - name: Run a one-line script
+      -  run: |
+          echo A pull request was closed
+ 
